@@ -1,0 +1,44 @@
+name: flutter_kag
+description: A new Flutter project.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=2.19.2 <3.0.0"
+
+dependencies:
+  cached_network_image: ^3.2.3
+  flutter:
+    sdk: flutter
+  flutter_alice: ^1.0.2
+  get: ^4.6.5
+  get_storage: ^2.1.1
+  google_maps_flutter: ^2.2.6
+  http: ^0.13.6
+  overlay_support: ^1.2.1
+  sliding_up_panel: ^2.0.0+1
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/open_sans/OpenSans-BoldItalic.ttf
+        - asset: assets/fonts/open_sans/OpenSans-ExtraBoldItalic.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Italic.ttf
+        - asset: assets/fonts/open_sans/OpenSans-LightItalic.ttf
+        - asset: assets/fonts/open_sans/OpenSans-MediumItalic.ttf
+        - asset: assets/fonts/open_sans/OpenSans-SemiBoldItalic.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Bold.ttf
+        - asset: assets/fonts/open_sans/OpenSans-ExtraBold.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Regular.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Light.ttf
+        - asset: assets/fonts/open_sans/OpenSans-Medium.ttf
+        - asset: assets/fonts/open_sans/OpenSans-SemiBold.ttf
