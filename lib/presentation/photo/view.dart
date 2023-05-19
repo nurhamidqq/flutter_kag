@@ -15,70 +15,73 @@ class PhotoPage extends GetView<PhotoController> {
       builder: (_) {
         return Scaffold(
           backgroundColor: AppColors.primary,
-          body: Column(
-            children: [
-              const SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () => Get.back(),
-                      icon: Icon(Icons.arrow_back_ios_new_rounded,
-                          color: AppColors.white),
-                    ),
-                    Text(
-                      'Album ${controller.album?.id}',
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    IconButton(
-                      onPressed: () => false,
-                      icon: const Icon(Icons.info, color: Colors.transparent),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(30),
-                    ),
-                  ),
-                  child: Obx(
-                    () => controller.loading.value
-                        ? LoadingIndicator(color: AppColors.primary)
-                        : controller.listPhoto.isEmpty
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Photo Not Found',
-                                    style: TextStyle(
-                                      color: AppColors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+          body: Obx(
+            () => controller.loading.value
+                ? LoadingIndicator(color: AppColors.primary)
+                : controller.listPhoto.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Photo Not Found',
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            IconButton(
+                              onPressed: () => controller.getListPhoto(),
+                              icon: Icon(
+                                Icons.refresh,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Column(
+                        children: [
+                          const SizedBox(height: 40),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  onPressed: () => Get.back(),
+                                  icon: Icon(Icons.arrow_back_ios_new_rounded,
+                                      color: AppColors.white),
+                                ),
+                                Text(
+                                  'Album ${controller.album?.id}',
+                                  style: const TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
                                   ),
-                                  const SizedBox(height: 4),
-                                  IconButton(
-                                    onPressed: () => controller.getListPhoto(),
-                                    icon: Icon(
-                                      Icons.refresh,
-                                      color: AppColors.white,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : RefreshIndicator(
+                                  textAlign: TextAlign.center,
+                                ),
+                                IconButton(
+                                  onPressed: () => false,
+                                  icon: const Icon(Icons.info,
+                                      color: Colors.transparent),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(30),
+                                ),
+                              ),
+                              child: RefreshIndicator(
                                 color: AppColors.primary,
                                 onRefresh: () => controller.loading.value
                                     ? false
@@ -135,10 +138,10 @@ class PhotoPage extends GetView<PhotoController> {
                                   itemCount: controller.listPhoto.length,
                                 ),
                               ),
-                  ),
-                ),
-              )
-            ],
+                            ),
+                          )
+                        ],
+                      ),
           ),
         );
       },

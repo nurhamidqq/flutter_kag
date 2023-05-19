@@ -27,7 +27,7 @@ class HttpClient {
   }
 
   handleError(error) {
-    ToastUtil.showSnackBarError(error.toString(), error.toString());
+    ToastUtil.showSnackBarError('Error', error.toString());
   }
 
   responseHandler(http.Response response) {
