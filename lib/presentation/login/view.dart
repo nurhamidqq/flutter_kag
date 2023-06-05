@@ -176,7 +176,12 @@ class FormLogin extends StatelessWidget {
                     future: controller.checkImei(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData && snapshot.data != '') {
-                        return Text('${snapshot.data}');
+                        return Row(
+                          children: [
+                            const Text('IMEI : '),
+                            SelectableText('${snapshot.data}'),
+                          ],
+                        );
                       }
                       return const SizedBox();
                     },

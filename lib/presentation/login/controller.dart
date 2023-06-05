@@ -28,6 +28,11 @@ class LoginController extends GetxController {
   bool isSupport = false;
   bool haveBiometric = false;
 
+  List<String> listAuthorizedImei = [
+    '410282092273441',
+    '358240051111110',
+  ];
+
   @override
   void onInit() {
     checkLocalAuth();
@@ -71,7 +76,8 @@ class LoginController extends GetxController {
     try {
       bool havePermission = await getPhonePermission();
       if (havePermission) {
-        return 'IMEI : ${await DeviceInformation.deviceIMEINumber}';
+        imei = await DeviceInformation.deviceIMEINumber;
+        return imei;
       } else {
         toast('Phone permission denied');
         return '';
@@ -89,30 +95,36 @@ class LoginController extends GetxController {
               biometricOnly: true, useErrorDialogs: false));
       if (didAuthenticate) {
         loading.value = true;
-        final company = Company(
-            name: 'PT. Nur Hamid', bs: 'Jl. Kemayoran', catchPhrase: 'Jakarta');
-        final address = Address(
-          street: 'Jl. Panjang',
-          suite: 'Grogol',
-          city: 'Jakarta',
-          zipcode: '11470',
-          geo: Geo(lat: '-6.172243', lng: '106.785995'),
-        );
+        if (isIMEIAuthorized()) {
+          final company = Company(
+              name: 'PT. Nur Hamid',
+              bs: 'Jl. Kemayoran',
+              catchPhrase: 'Jakarta');
+          final address = Address(
+            street: 'Jl. Panjang',
+            suite: 'Grogol',
+            city: 'Jakarta',
+            zipcode: '11470',
+            geo: Geo(lat: '-6.172243', lng: '106.785995'),
+          );
 
-        final user = UserModel(
-            id: 1 + Random().nextInt(9),
-            name: 'Nur Hamid',
-            username: 'nurhamid',
-            email: 'nurhamid05@gmail.com',
-            phone: "+6281368233580",
-            website: "nurhamid.site",
-            address: address,
-            company: company);
+          final user = UserModel(
+              id: 1 + Random().nextInt(9),
+              name: 'Nur Hamid',
+              username: 'nurhamid',
+              email: 'nurhamid05@gmail.com',
+              phone: "+6281368233580",
+              website: "nurhamid.site",
+              address: address,
+              company: company);
 
-        await Storage.setLoginData(user);
-        await Storage.setlogin();
-        ToastUtil.showSnackBar('Info', 'Login Success', ToastStatus.success);
-        Get.offAndToNamed('/homePage');
+          await Storage.setLoginData(user);
+          await Storage.setlogin();
+          ToastUtil.showSnackBar('Info', 'Login Success', ToastStatus.success);
+          Get.offAndToNamed('/homePage');
+        } else {
+          ToastUtil.showSnackBarError('Login Failed', 'IMEI not authorized');
+        }
         loading.value = false;
       }
     }
@@ -128,10 +140,15 @@ class LoginController extends GetxController {
             element.address?.city == passwordCtr.text);
 
         if (user.isNotEmpty) {
-          await Storage.setLoginData(user.first);
-          await Storage.setlogin();
-          ToastUtil.showSnackBar('Info', 'Login Success', ToastStatus.success);
-          Get.offAndToNamed('/homePage');
+          if (isIMEIAuthorized()) {
+            await Storage.setLoginData(user.first);
+            await Storage.setlogin();
+            ToastUtil.showSnackBar(
+                'Info', 'Login Success', ToastStatus.success);
+            Get.offAndToNamed('/homePage');
+          } else {
+            ToastUtil.showSnackBarError('Login Failed', 'IMEI not authorized');
+          }
         } else {
           ToastUtil.showSnackBarError(
               'Login Failed', 'Please check email or password');
@@ -139,5 +156,12 @@ class LoginController extends GetxController {
       }
       loading.value = false;
     }
+  }
+
+  bool isIMEIAuthorized() {
+    if (listAuthorizedImei.contains(imei)) {
+      return true;
+    }
+    return false;
   }
 }
