@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   cached_network_image: ^3.2.3
+  device_information: ^0.0.4
   flutter:
     sdk: flutter
   flutter_alice: ^1.0.2
@@ -15,7 +16,9 @@ dependencies:
   get_storage: ^2.1.1
   google_maps_flutter: ^2.2.6
   http: ^0.13.6
+  local_auth: ^2.1.6
   overlay_support: ^1.2.1
+  permission_handler: ^10.2.0
   sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:

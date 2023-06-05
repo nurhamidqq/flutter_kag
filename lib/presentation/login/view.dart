@@ -134,21 +134,53 @@ class FormLogin extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Obx(
-                    () => SizedBox(
-                      height: 45,
-                      width: Get.width - 32,
-                      child: ButtonCustom(
-                        isLoading: controller.loading.value,
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                          controller.login();
-                        },
-                        label: 'Login',
-                        backgroundColor: AppColors.primary,
-                      ),
+                    () => Row(
+                      children: [
+                        controller.buttonFingerprintVisible.value
+                            ? Row(
+                                children: [
+                                  SizedBox(
+                                    height: 45,
+                                    width: 100,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        FocusScope.of(context).unfocus();
+                                        controller.fingerprintAuth();
+                                      },
+                                      icon: const Icon(Icons.fingerprint),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                ],
+                              )
+                            : const SizedBox(),
+                        Expanded(
+                          child: SizedBox(
+                            height: 45,
+                            child: ButtonCustom(
+                              isLoading: controller.loading.value,
+                              onPressed: () {
+                                FocusScope.of(context).unfocus();
+                                controller.login();
+                              },
+                              label: 'Login',
+                              backgroundColor: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 20),
+                  FutureBuilder<String?>(
+                    future: controller.checkImei(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data != '') {
+                        return Text('${snapshot.data}');
+                      }
+                      return const SizedBox();
+                    },
+                  ),
                 ],
               ),
             ),
