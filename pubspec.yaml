@@ -19,6 +19,7 @@ dependencies:
   local_auth: ^2.1.6
   overlay_support: ^1.2.1
   permission_handler: ^10.2.0
+  shared_preferences: ^2.1.1
   sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:

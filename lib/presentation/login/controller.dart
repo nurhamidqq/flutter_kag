@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
   final UserRepository _userRepository = UserRepository();
@@ -27,14 +28,19 @@ class LoginController extends GetxController {
   String? imei;
   bool isSupport = false;
   bool haveBiometric = false;
+  SharedPreferences? prefs;
 
   List<String> listAuthorizedImei = [
     '410282092273441',
-    '358240051111110',
+    // '358240051111110',
   ];
 
   @override
-  void onInit() {
+  void onInit() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs?.getBool('visibleBio') == true) {
+      buttonFingerprintVisible.value = true;
+    }
     checkLocalAuth();
     super.onInit();
   }
@@ -44,6 +50,28 @@ class LoginController extends GetxController {
     emailCtr.dispose();
     passwordCtr.dispose();
     super.dispose();
+  }
+
+  setTempData() {
+    prefs?.setString('email', 'nurhamid05@gmail.com');
+    prefs?.setString('token', '123');
+    prefs?.setBool('visibleBio', true);
+  }
+
+  loginWithBio() {
+    final email = prefs?.getString('email');
+    final token = prefs?.getString('token');
+
+    //kirim ke api
+    if (email == 'nurhamid05@gmail.com' && token == '123') {
+      toast('Success');
+    } else {
+      toast('Error');
+    }
+  }
+
+  clearTempData() {
+    prefs?.clear();
   }
 
   checkLocalAuth() async {
@@ -92,7 +120,7 @@ class LoginController extends GetxController {
       final bool didAuthenticate = await localAuth.authenticate(
           localizedReason: 'Please authenticate to login',
           options: const AuthenticationOptions(
-              biometricOnly: true, useErrorDialogs: false));
+              biometricOnly: true, useErrorDialogs: false, stickyAuth: true));
       if (didAuthenticate) {
         loading.value = true;
         if (isIMEIAuthorized()) {
